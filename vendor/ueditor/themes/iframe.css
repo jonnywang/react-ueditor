@@ -1,1 +1,16 @@
-/*可以在这里添加你自己的css*/
+body {
+    max-height: 400px !important;
+    overflow: scroll;
+}
+
+body::-webkit-scrollbar {
+    display: none;
+}
+
+body section {
+    max-width: 730px;
+}
+
+body section img {
+    max-width: 730px;
+}
