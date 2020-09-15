@@ -15,11 +15,13 @@ const inputStyle = {
 }
 
 class Input extends React.PureComponent {
+
     render() {
-        let {type, value, onChange, style} = this.props
+        let {type, defaultValue, onChange, style} = this.props
         let mergedStyle = {...inputStyle, ...style}
-        return <input style={mergedStyle} type={type} value={value} onChange={onChange} />
+        return <input style={mergedStyle} type={type} value={defaultValue} onChange={onChange} />
     }
+
 }
 
 export default Input

@@ -10,15 +10,17 @@ const labelStyle = {
 
 const labelName = {
     display: 'inline-block',
-    width: '50px',
+    width: '60px',
 }
 
 class Label extends React.PureComponent {
+
     render() {
         let {style, children, name} = this.props
         let mergedStyle = {...labelStyle, ...style}
         return <label style={mergedStyle}><span style={labelName}>{name}</span>{children}</label>
     }
+
 }
 
 export default Label

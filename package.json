@@ -1,6 +1,6 @@
 {
     "name": "ifanrx-react-ueditor",
-    "version": "2.3.0",
+    "version": "2.3.1",
     "description": "an ueditor component for react",
     "main": "lib",
     "scripts": {
@@ -28,7 +28,7 @@
         "README.md"
     ],
     "dependencies": {
-        "rc-dialog": "6.5.11"
+        "rc-dialog": "8.3.4"
     },
     "devDependencies": {
         "@babel/cli": "^7.1.5",

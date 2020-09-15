@@ -78,15 +78,15 @@ class Link extends React.Component {
             <form>
                 <div style={formItmeStyle}>
                     <span style={spanStyle}>文本内容：</span>
-                    <Input type='text' style={inputStyle} value={text} onChange={e => this.changeConfig(e, 'text')} />
+                    <Input type='text' style={inputStyle} defaultValue={text} onChange={e => this.changeConfig(e, 'text')} />
                 </div>
                 <div style={formItmeStyle}>
                     <span style={spanStyle}>链接地址：</span>
-                    <Input type='text' style={inputStyle} value={link} onChange={e => this.changeConfig(e, 'link')} />
+                    <Input type='text' style={inputStyle} defaultValue={link} onChange={e => this.changeConfig(e, 'link')} />
                 </div>
                 <div style={formItmeStyle}>
                     <span style={spanStyle}>标题：</span>
-                    <Input type='text' style={inputStyle} value={title} onChange={e => this.changeConfig(e, 'title')} />
+                    <Input type='text' style={inputStyle} defaultValue={title} onChange={e => this.changeConfig(e, 'title')} />
                 </div>
                 <div style={formItmeStyle}>
                     <span style={{color: 'rgba(0, 0, 0, 0.65)', fontSize: '14px'}}>是否在新窗口打开：</span>

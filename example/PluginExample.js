@@ -89,12 +89,8 @@ let previewHtml = function(ueditor) {
 }
 
 class MediaExample extends React.Component {
-    constructor() {
-        super()
-        this.state = {
-            progress: -1,
-        }
-    }
+
+    editorRef = React.createRef()
 
     updateEditorContent = content => {
         this.editorResult = content
@@ -107,25 +103,28 @@ class MediaExample extends React.Component {
     }
 
     uploadVideo = e => {
+        console.log(e.target.files[0])
         let _this = this
-        return new Promise(function(resolve, reject) {
+        return new Promise((resolve, reject) => {
             let i = 0
             let instance = setInterval(() => {
                 if (i !== 100) {
-                    _this.setState({progress: ++i})
+                    console.log(i)
+                    this.editorRef.current.updateVideoProgress(i++)
                 }
             }, 50)
             setTimeout(() => {
-                resolve('https://cloud-minapp-1131.cloud.ifanrusercontent.com/1eBb1SeNlayvGEKT.mp4')
+                resolve('http://share.jx.com/uploads/x.mp4')
                 _this.setState({progress: -1})
                 clearInterval(instance)
-            }, 5100)
+            }, 30000)
         })
     }
 
     uploadAudio = e => {
+        console.log(e.target.files[0])
         return new Promise(function(resolve, reject) {
-            resolve('https://cloud-minapp-1131.cloud.ifanrusercontent.com/1eEUtZNsjiOiHbWW.mp3')
+            resolve('http://share.jx.com/uploads/x.mp4')
         })
     }
 
@@ -134,8 +133,6 @@ class MediaExample extends React.Component {
     }
 
     render() {
-        let {progress} = this.state
-
         // 旧插件写法
         let extendControls = [{
             name: 'insertOthers',
@@ -150,6 +147,8 @@ class MediaExample extends React.Component {
 
         return (
             <ReactUeditor
+                debug
+                ref={this.editorRef}
                 getRef={this.getRef}
                 extendControls={extendControls}
                 ueditorPath='../vendor/ueditor'
@@ -166,7 +165,6 @@ class MediaExample extends React.Component {
                 uploadVideo={this.uploadVideo}
                 uploadAudio={this.uploadAudio}
                 onChange={this.updateEditorContent}
-                progress={progress}
                 multipleImagesUpload={false}
             />
         )

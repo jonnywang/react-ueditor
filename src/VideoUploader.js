@@ -45,11 +45,12 @@ const linkRegx = /^https?:\/\/(([a-zA-Z0-9_-])+(\.)?)*(:\d+)?(\/((\.)?(\?)?=?&?[
 let timeoutInstance = null
 
 class UploadModal extends React.PureComponent {
+
     state = {
         sources: [],
         currentSource: '',
-        width: 400,
-        height: 400,
+        width: '100%',
+        height: 'auto',
         controls: 'true',
         autoplay: 'false',
         muted: 'false',
@@ -77,7 +78,7 @@ class UploadModal extends React.PureComponent {
         } else {
             this.setState({
                 sources: newsources,
-                currentSource: '',
+                currentSource: ''
             }, () => {
                 this.props.onChange && this.props.onChange(this.generateHtml())
             })
@@ -87,7 +88,11 @@ class UploadModal extends React.PureComponent {
     removeSource = index => {
         let sourcesCopy = this.state.sources.concat([])
         sourcesCopy.splice(index, 1)
-        this.setState({sources: sourcesCopy})
+        this.setState({
+            sources: sourcesCopy
+        }, () => {
+            this.props.onChange && this.props.onChange(this.generateHtml())
+        })
     }
 
     upload = e => {
@@ -96,7 +101,9 @@ class UploadModal extends React.PureComponent {
         if (!upload) return
 
         upload(e).then(url => {
-            this.setState({currentSource: url})
+            this.setState({currentSource: url}, () => {
+                this.addSource()
+            })
         }).catch(e => {
             e.constructor === Error ? this.showErrorMsg(e.message) : this.showErrorMsg(e)
         })
@@ -107,7 +114,7 @@ class UploadModal extends React.PureComponent {
         clearTimeout(timeoutInstance)
         timeoutInstance = setTimeout(() => {
             this.setState({errorMsg: '', errorMsgVisible: false})
-        }, 4000)
+        }, 10000)
     }
 
     getFileType = (fileUrl, mediaType) => {
@@ -140,6 +147,8 @@ class UploadModal extends React.PureComponent {
 
             return html + '<p></p>'
         }
+
+        return ''
     }
 
     changeConfig = (e, type) => {
@@ -162,7 +171,8 @@ class UploadModal extends React.PureComponent {
         let {sources} = this.state
         if (sources.length > 0) {
             let list = sources.map((source, index) => {
-                return <Tag value={source} key={source} index={index} onRemove={this.removeSource} />
+                console.log(source, index)
+                return <Tag key={index} skey={index} value={source} onRemove={() => this.removeSource(index)} />
             })
             return list
         } else {
@@ -175,12 +185,12 @@ class UploadModal extends React.PureComponent {
         return (
             <form style={style.paramsConfig}>
                 <Label name='width'>
-                    <Input type='number' defaultValue={width} onChange={e => {
+                    <Input type='text' defaultValue={width} onChange={e => {
                         this.changeConfig(e, 'width')
                     }} />
                 </Label>
                 <Label name='height'>
-                    <Input type='number' defaultValue={height} onChange={e => {
+                    <Input type='text' defaultValue={height} onChange={e => {
                         this.changeConfig(e, 'height')
                     }} />
                 </Label>
@@ -221,15 +231,14 @@ class UploadModal extends React.PureComponent {
     }
 
     render() {
-        let {currentSource, errorMsg, errorMsgVisible} = this.state
+        let {currentSource, sources, errorMsg, errorMsgVisible} = this.state
         let {progress} = this.props
 
         return (
             <div>
                 <div>
                     <span style={style.insertTitle}>插入链接</span>
-                    <Input style={{width: '300px'}} type='text' value={currentSource}
-                        onChange={this.updateCurrentSource} />
+                    <Input style={{width: '300px'}} type='text' defaultValue={currentSource} onChange={this.updateCurrentSource} />
                     <Button onClick={this.addSource}>添加</Button>
                     <Upload onChange={this.upload} />
                 </div>
@@ -242,16 +251,15 @@ class UploadModal extends React.PureComponent {
                 <div style={style.sourceList}>
                     {this.renderSourceList()}
                 </div>
-                <span style={style.configTitle}>参数配置</span>
-                {this.renderVideoConfig()}
-                <div style={{textAlign: 'center', padding: '20px 10px 0 10px'}}>
-                    {
-                        <video src={currentSource} controls='controls'
-                            style={{width: '400px', height: '250px', backgroundColor: '#000'}}>
+                {sources.length > 0 ? <>
+                    <span style={style.configTitle}>参数配置</span>
+                    {this.renderVideoConfig()}
+                    <div style={{textAlign: 'center', padding: '20px 10px 0 10px'}}>
+                        <video src={sources[0]} controls='controls' style={{width: '100%', height: '250px', backgroundColor: '#000'}}>
                             你的浏览器不支持 video 标签
                         </video>
-                    }
-                </div>
+                    </div>
+                </> : null}
             </div>
         )
     }

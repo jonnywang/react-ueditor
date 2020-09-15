@@ -49,6 +49,8 @@ class ReactUeditor extends React.Component {
             videoHtml: '',
             audioHtml: '',
             pluginsWithCustomRender: [],
+            videoProgress: 0,
+            audioProgress: 0,
         }
     }
 
@@ -180,15 +182,19 @@ class ReactUeditor extends React.Component {
     }))
 
     registerUploadVideo = () => {
-        let {uploadVideo, progress} = this.props
+        let {uploadVideo} = this.props
         return this.registerPlugin((ueditor) => ({
             menuText: '上传视频',
             cssRules: 'background-position: -320px -20px;',
             mode: MODE.INTERNAL_MODAL,
-            render: () => <VideoUploader upload={uploadVideo} progress={progress} onChange={this.videoChange} />,
+            render: () => <VideoUploader upload={uploadVideo} progress={this.state.videoProgress} onChange={this.videoChange} />,
             onConfirm: () => {
+                let videoHtml = this.state.videoHtml
+                if (videoHtml.length === 0) {
+                    return
+                }
                 ueditor.execCommand('insertparagraph')
-                ueditor.execCommand('inserthtml', this.state.videoHtml, true)
+                ueditor.execCommand('inserthtml', videoHtml, true)
                 ueditor.execCommand('insertparagraph')
                 ueditor.execCommand('insertparagraph')
             },
@@ -196,15 +202,19 @@ class ReactUeditor extends React.Component {
     }
 
     registerUploadAudio = () => {
-        let {uploadAudio, progress} = this.props
+        let {uploadAudio} = this.props
         return this.registerPlugin((ueditor) => ({
             menuText: '上传音频',
             cssRules: 'background: url(' + uploadAudioIcon + ') !important; background-size: 20px 20px !important;',
             mode: MODE.INTERNAL_MODAL,
-            render: () => <AudioUploader upload={uploadAudio} progress={progress} onChange={this.audioChange} />,
+            render: () => <AudioUploader upload={uploadAudio} progress={this.state.audioProgress} onChange={this.audioChange} />,
             onConfirm: () => {
+                let audioHtml = this.state.audioHtml
+                if (audioHtml.length === 0) {
+                    return
+                }
                 ueditor.execCommand('insertparagraph')
-                ueditor.execCommand('inserthtml', this.state.audioHtml, true)
+                ueditor.execCommand('inserthtml', audioHtml, true)
                 ueditor.execCommand('insertparagraph')
                 ueditor.execCommand('insertparagraph')
             },
@@ -220,6 +230,19 @@ class ReactUeditor extends React.Component {
             ueditor && ueditor.execCommand('inserthtml', this.state.linkHtml, true)
         },
     }))
+
+    updateVideoProgress = (p) => {
+        console.log('video progress:', p)
+        this.setState({
+            videoProgress: p
+        })
+    }
+
+    updateAudioProgress = (p) => {
+        this.setState({
+            audioProgress: p
+        })
+    }
 
     videoChange = videoHtml => {
         this.setState({videoHtml})

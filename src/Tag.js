@@ -30,18 +30,18 @@ const tagStyle = {
 }
 
 class Tag extends React.PureComponent {
+
     render() {
-        let {value, index, onRemove, style, key} = this.props
+        let {value, index, onRemove, style, skey} = this.props
         let mergedStyle = {...tagStyle.wrapper, ...style}
         return (
-            <span style={mergedStyle} key={key}>
-        <span style={tagStyle.text}>{value}</span>
-        <i style={tagStyle.icon} onClick={() => {
-            onRemove(index)
-        }}>×</i>
-      </span>
+            <span style={mergedStyle} key={skey}>
+                <span style={tagStyle.text}>{value}</span>
+                <i style={tagStyle.icon} onClick={() => onRemove(index)}>×</i>
+            </span>
         )
     }
+
 }
 
 export default Tag
